@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portafolio Minimalista</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --fg: #ffffff;
+      --transition-speed: 0.6s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+      animation: invertBackground 16s infinite alternate linear;
+    }
+
+    /* Animación de intercambio lento de colores de fondo y texto */
+    @keyframes invertBackground {
+      0%, 20% { --bg: #000000; --fg: #ffffff; }
+      40%, 60% { --bg: #ffffff; --fg: #000000; }
+      80%, 100% { --bg: #000000; --fg: #ffffff; }
+    }
+
+    /* Contenedor con márgenes laterales grandes por defecto */
+    .wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      transition: max-width var(--transition-speed) ease;
+    }
+
+    /* Cuando una sección está expandida, ensanchamos el contenedor */
+    .wrapper.expanded {
+      max-width: 1000px;
+    }
+
+    /* 1. Banner de Bienvenida inicial (ocupa toda la altura de la pantalla) */
+    .hero-banner {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.7;
+      margin-bottom: 2rem;
+    }
+
+    .btn-next {
+      background: none;
+      border: 1px solid var(--fg);
+      color: var(--fg);
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .btn-next:hover {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    /* 2. Secciones apiladas */
+    .section-stack {
+      padding: 4rem 0;
+      border-top: 1px solid rgba(128, 128, 128, 0.3);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 1rem 0;
+      user-select: none;
+    }
+
+    .section-header h2 {
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+    }
+
+    .toggle-icon {
+      font-size: 1.5rem;
+      font-weight: 300;
+      transition: transform 0.3s ease;
+    }
+
+    /* Contenido expandible */
+    .section-content {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.4s ease;
+    }
+
+    .section-stack.active .section-content {
+      max-height: 1500px; /* Suficiente para albergar el contenido */
+      opacity: 1;
+      padding: 2rem 0 1rem 0;
+    }
+
+    .section-stack.active .toggle-icon {
+      transform: rotate(45deg); /* Gira el "+" convirtiéndolo en "x" o aspa */
+    }
+
+    /* Estilos internos de las expansiones */
+    p {
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      opacity: 0.85;
+    }
+
+    .expanded-img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      margin-top: 1.5rem;
+      filter: grayscale(100%);
+      border: 1px solid rgba(128, 128, 128, 0.3);
+    }
+
+    /* Subventanas para la sección intermedia */
+    .sub-windows-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .sub-window {
+      border: 1px solid rgba(128, 128, 128, 0.4);
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .sub-window:hover {
+      border-color: var(--fg);
+      background: rgba(128, 128, 128, 0.05);
+    }
+
+    .sub-window h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Detalle oculto de las subventanas */
+    .sub-content-detail {
+      display: none;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      border-top: 1px dashed rgba(128, 128, 128, 0.3);
+      padding-top: 1rem;
+    }
+
+    .sub-window.open .sub-content-detail {
+      display: block;
+    }
+
+    footer {
+      padding: 4rem 0;
+      font-size: 0.85rem;
+      opacity: 0.5;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper" id="mainWrapper">
+
+    <!-- Banner de bienvenida -->
+    <header class="hero-banner" id="bienvenida">
+      <h1 class="hero-title">Nombre Artístico</h1>
+      <p class="hero-subtitle">Ficha artística / Portafolio contemporáneo.</p>
+      <a href="#seccion-sobre-mi" class="btn-next" onclick="expandSection('seccion-sobre-mi')">Siguiente ↓</a>
+    </header>
+
+    <!-- Sección 1: Sobre mí -->
+    <div class="section-stack" id="seccion-sobre-mi">
+      <div class="section-header" onclick="toggleSection('seccion-sobre-mi')">
+        <h2>Sobre mí</h2>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="section-content">
+        <p>Aquí irá la descripción detallada de tu perfil artístico. Al abrir esta sección, los márgenes laterales se ensanchan automáticamente para ofrecer una lectura más amplia y envolvente.</p>
+        <p>Explora tu trayectoria, visión creativa y conceptos principales de tu obra.</p>
+        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80" alt="Imagen ampliada Sobre Mí" class="expanded-img">
+      </div>
+    </div>
+
+    <!-- Sección 2: Currículum / Mi trabajo / Futuros proyectos -->
+    <div class="section-stack" id="seccion-trabajos">
+      <div class="section-header" onclick="toggleSection('seccion-trabajos')">
+        <h2>Trayectoria & Obra</h2>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="section-content">
+        <p>Selecciona una ventana para desplegar su contenido específico:</p>
+        
+        <div class="sub-windows-grid">
+          <!-- Ventana 1 -->
+          <div class="sub-window" onclick="toggleSubWindow(this)">
+            <h3>Currículum</h3>
+            <p style="font-size: 0.85rem; margin: 0;">Exposiciones, estudios y premios.</p>
+            <div class="sub-content-detail">
+              <p><strong>2024 -</strong> Exposición individual en Galería Central.</p>
+              <p><strong>2022 -</strong> Residencia artística internacional.</p>
+            </div>
+          </div>
+
+          <!-- Ventana 2 -->
+          <div class="sub-window" onclick="toggleSubWindow(this)">
+            <h3>Mi trabajo</h3>
+            <p style="font-size: 0.85rem; margin: 0;">Proyectos realizados y piezas clave.</p>
+            <div class="sub-content-detail">
+              <p>Serie fotográfica y pictórica enfocada en la dualidad del espacio y la materia.</p>
+            </div>
+          </div>
+
+          <!-- Ventana 3 -->
+          <div class="sub-window" onclick="toggleSubWindow(this)">
+            <h3>Futuros proyectos</h3>
+            <p style="font-size: 0.85rem; margin: 0;">Próximas obras y muestras.</p>
+            <div class="sub-content-detail">
+              <p>En desarrollo: Instalación interactiva prevista para finales de año.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sección 3: Contacto -->
+    <div class="section-stack" id="seccion-contacto">
+      <div class="section-header" onclick="toggleSection('seccion-contacto')">
+        <h2>Contacto</h2>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="section-content">
+        <p>Para colaboraciones, adquisiciones o consultas generales:</p>
+        <p><strong>Correo:</strong> tuemail@ejemplo.com</p>
+        <p><strong>Instagram:</strong> @tuusuario</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2026. Todos los derechos reservados.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // Función para abrir/cerrar secciones apiladas principales
+    function toggleSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      section.classList.toggle('active');
+      checkWrapperWidth();
+    }
+
+    // Función directa desde el botón "Siguiente"
+    function expandSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (!section.classList.contains('active')) {
+        section.classList.add('active');
+      }
+      checkWrapperWidth();
+    }
+
+    // Función para abrir subventanas dentro de la sección intermedia
+    function toggleSubWindow(element) {
+      element.classList.toggle('open');
+    }
+
+    // Revisa si alguna sección principal está abierta para ensanchar el contenedor de márgenes
+    function checkWrapperWidth() {
+      const sections = document.querySelectorAll('.section-stack');
+      const wrapper = document.getElementById('mainWrapper');
+      let anyOpen = false;
+
+      sections.forEach(sec => {
+        if (sec.classList.contains('active')) {
+          anyOpen = true;
+        }
+      });
+
+      if (anyOpen) {
+        wrapper.classList.add('expanded');
+      } else {
+        wrapper.classList.remove('expanded');
+      }
+    }
+  </script>
+</body>
+</html>
