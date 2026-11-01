@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portafolio Artístico</title>
+
+  <!-- Librería de Animaciones AOS (Animate On Scroll) -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <!-- Iconos Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --bg-color: #0f1117;
+      --card-bg: #1a1d24;
+      --accent: #8b5cf6; /* Color violeta/artístico */
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    /* Navegación */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(15, 17, 23, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 10%;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--text-main);
+    }
+
+    /* Sección Principal / Hero */
+    header {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 1rem;
+      background: radial-gradient(circle at center, #1e1b4b 0%, var(--bg-color) 70%);
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      font-weight: 800;
+    }
+
+    header p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.8rem;
+      background-color: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Secciones Generales */
+    section {
+      padding: 6rem 10%;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 3rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 4px;
+      background: var(--accent);
+      margin: 0.5rem auto 0;
+      border-radius: 2px;
+    }
+
+    /* Sobre mí / Biografía */
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .profile-img {
+      width: 100%;
+      border-radius: 20px;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* Galería / Portafolio */
+    .grid-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .card-body h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .card-body p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Contacto y Redes */
+    footer {
+      text-align: center;
+      padding: 4rem 1rem;
+      background: #090a0d;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-links a {
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+
+    .social-links a:hover {
+      color: var(--accent);
+    }
+
+    /* Adaptabilidad a Móviles */
+    @media (max-width: 768px) {
+      .about-content {
+        grid-template-columns: 1fr;
+      }
+      header h1 {
+        font-size: 2.5rem;
+      }
+      nav ul {
+        display: none; /* Simplificado para móviles */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navegación -->
+  <nav>
+    <div class="logo">PORTAFOLIO ARTÍSTICO</div>
+    <ul>
+      <li><a href="#bio">Sobre mí</a></li>
+      <li><a href="#obras">Obras / Proyectos</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- Presentación / Hero -->
+  <header>
+    <h1 data-aos="fade-up">Tu Nombre Artístico</h1>
+    <p data-aos="fade-up" data-aos-delay="200">Disciplina / Especialidad (ej: Ilustración, Artes Plásticas, Diseño, Música)</p>
+    <a href="#obras" class="btn" data-aos="fade-up" data-aos-delay="400">Ver Galería</a>
+  </header>
+
+  <!-- Biografía / Resumen Ficha -->
+  <section id="bio">
+    <h2 class="section-title" data-aos="fade-up">Sobre Mí</h2>
+    <div class="about-content">
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="Foto de Perfil" class="profile-img" data-aos="zoom-in" />
+      <div data-aos="fade-left">
+        <p style="margin-bottom: 1rem;">
+          Escribe aquí una breve presentación sobre tu trayectoria, tu visión artística, influencias y tus metas creativas.
+        </p>
+        <p>
+          <strong>Especialidades:</strong> Pintura al óleo, Ilustración Digital, Dirección de Arte.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Galería / Ficha Artística -->
+  <section id="obras">
+    <h2 class="section-title" data-aos="fade-up">Proyectos Destacados</h2>
+    <div class="grid-gallery">
+      
+      <!-- Proyecto 1 -->
+      <div class="card" data-aos="fade-up" data-aos-delay="100">
+        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80" alt="Proyecto 1">
+        <div class="card-body">
+          <h3>Nombre del Proyecto 1</h3>
+          <p>Descripción corta de la obra, técnica utilizada o concepto del proyecto.</p>
+        </div>
+      </div>
+
+      <!-- Proyecto 2 -->
+      <div class="card" data-aos="fade-up" data-aos-delay="200">
+        <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=600&q=80" alt="Proyecto 2">
+        <div class="card-body">
+          <h3>Nombre del Proyecto 2</h3>
+          <p>Descripción corta de la obra, técnica utilizada o concepto del proyecto.</p>
+        </div>
+      </div>
+
+      <!-- Proyecto 3 -->
+      <div class="card" data-aos="fade-up" data-aos-delay="300">
+        <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=600&q=80" alt="Proyecto 3">
+        <div class="card-body">
+          <h3>Nombre del Proyecto 3</h3>
+          <p>Descripción corta de la obra, técnica utilizada o concepto del proyecto.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Pie de página / Contacto -->
+  <footer id="contacto">
+    <h2>¿Hablamos?</h2>
+    <p style="color: var(--text-muted); margin-top: 0.5rem;">Disponible para encargos, exposiciones y colaboraciones.</p>
+    
+    <div class="social-links">
+      <a href="mailto:tuemail@ejemplo.com" title="Email"><i data-lucide="mail"></i></a>
+      <a href="https://instagram.com" target="_blank" title="Instagram"><i data-lucide="instagram"></i></a>
+      <a href="https://behance.net" target="_blank" title="Behance"><i data-lucide="layers"></i></a>
+    </div>
+
+    <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--text-muted);">
+      © 2026 Tu Nombre. Todos los derechos reservados.
+    </p>
+  </footer>
+
+  <!-- Inicializar animaciones e iconos -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      once: true
+    });
+    lucide.createIcons();
+  </script>
+</body>
+</html>
