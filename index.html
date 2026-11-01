@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ion Sánchez — Portafolio</title>
   <style>
+    /* Definición de los dos colores del sistema minimalista */
     :root {
-      --bg: #000000;
-      --fg: #ffffff;
+      --color-a: #000000; /* Negro */
+      --color-b: #ffffff; /* Blanco */
     }
 
     * {
@@ -17,32 +18,37 @@
       scroll-behavior: smooth;
     }
 
+    /* El fondo general de la página usa el Color A */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--fg);
+      background-color: var(--color-a);
+      color: var(--color-b);
       overflow-x: hidden;
-      /* Transición extremadamente suave y lenta entre blanco y negro */
-      transition: background-color 4s ease, color 4s ease;
+      /* Transición extremadamente lenta y suave en el intercambio de colores */
+      transition: background-color 6s ease, color 6s ease;
     }
 
-    /* Contenedor con márgenes laterales (amplio por defecto) */
+    /* Contenedor con márgenes laterales generosos por defecto */
     .wrapper {
-      max-width: 1100px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 0 4rem;
-      transition: max-width 0.6s ease, padding 0.6s ease;
+      padding: 4rem 6rem;
+      /* La caja interior tiene el Color B como fondo independiente */
+      background-color: var(--color-b);
+      color: var(--color-a);
+      min-height: 100vh;
+      transition: max-width 0.6s ease, padding 0.6s ease, background-color 6s ease, color 6s ease;
     }
 
-    /* Cuando CUALQUIER sección está abierta, la web ocupa el 100% sin márgenes */
+    /* Cuando CUALQUIER sección está abierta, la caja interior ocupa el 100% sin márgenes */
     .wrapper.fullscreen-mode {
       max-width: 100%;
-      padding: 0 6rem;
+      padding: 4rem 8rem;
     }
 
     /* 1. Banner de Bienvenida inicial */
     .hero-banner {
-      height: 100vh;
+      min-height: 80vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -64,8 +70,8 @@
 
     .btn-next {
       background: none;
-      border: 1px solid var(--fg);
-      color: var(--fg);
+      border: 1px solid currentColor;
+      color: inherit;
       padding: 0.75rem 1.8rem;
       font-size: 0.9rem;
       cursor: pointer;
@@ -74,14 +80,15 @@
     }
 
     .btn-next:hover {
-      background: var(--fg);
-      color: var(--bg);
+      background: currentColor;
+      /* Invertimos mediante la variable opuesta al hacer hover */
+      mix-blend-mode: difference;
     }
 
     /* Secciones apiladas */
     .section-stack {
       padding: 4rem 0;
-      border-top: 1px solid rgba(128, 128, 128, 0.3);
+      border-top: 1px solid rgba(128, 128, 128, 0.4);
     }
 
     .section-header {
@@ -93,7 +100,7 @@
       user-select: none;
     }
 
-    /* Estilo especial para la cabecera de Ion Sánchez con foto circular */
+    /* Cabecera de Ion Sánchez con foto circular */
     .ion-header-content {
       display: flex;
       align-items: center;
@@ -106,7 +113,7 @@
       border-radius: 50%;
       object-fit: cover;
       filter: grayscale(100%);
-      border: 1px solid rgba(128, 128, 128, 0.4);
+      border: 1px solid rgba(128, 128, 128, 0.5);
     }
 
     .section-header h2 {
@@ -130,7 +137,7 @@
     }
 
     .section-stack.active .section-content {
-      max-height: 2500px;
+      max-height: 3000px;
       opacity: 1;
       padding: 3rem 0 2rem 0;
     }
@@ -153,19 +160,59 @@
       object-fit: cover;
       margin-top: 2rem;
       filter: grayscale(100%);
-      border: 1px solid rgba(128, 128, 128, 0.3);
+      border: 1px solid rgba(128, 128, 128, 0.4);
+    }
+
+    /* Estructura Horizontal para Currículum, Mi trabajo y Futuros proyectos */
+    .horizontal-sections-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .sub-section-card {
+      border: 1px solid rgba(128, 128, 128, 0.4);
+      padding: 2rem;
+      cursor: pointer;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .sub-section-card:hover {
+      border-color: currentColor;
+      background: rgba(128, 128, 128, 0.05);
+    }
+
+    .sub-section-card h3 {
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .sub-content-detail {
+      display: none;
+      margin-top: 1.5rem;
+      border-top: 1px dashed rgba(128, 128, 128, 0.4);
+      padding-top: 1.5rem;
+    }
+
+    .sub-section-card.open .sub-content-detail {
+      display: block;
     }
 
     footer {
       padding: 5rem 0;
       font-size: 0.9rem;
       opacity: 0.5;
-      border-top: 1px solid rgba(128, 128, 128, 0.3);
+      border-top: 1px solid rgba(128, 128, 128, 0.4);
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
+      .horizontal-sections-container {
+        grid-template-columns: 1fr;
+      }
       .wrapper, .wrapper.fullscreen-mode {
-        padding: 0 1.5rem;
+        padding: 2rem 2rem;
       }
       .hero-title {
         font-size: 2.2rem;
@@ -175,6 +222,7 @@
 </head>
 <body>
 
+  <!-- Contenedor interior con márgenes y color de fondo independiente -->
   <div class="wrapper" id="mainWrapper">
 
     <!-- Banner de bienvenida -->
@@ -200,46 +248,54 @@
       </div>
     </div>
 
-    <!-- Sección 2: Currículum -->
-    <div class="section-stack" id="seccion-curriculum">
-      <div class="section-header" onclick="toggleSection('seccion-curriculum')">
-        <h2>Currículum</h2>
+    <!-- Sección 2: Secciones horizontales unidas (Currículum, Mi trabajo, Futuros proyectos) -->
+    <div class="section-stack" id="seccion-trayectoria">
+      <div class="section-header" onclick="toggleSection('seccion-trayectoria')">
+        <h2>Trayectoria & Obra</h2>
         <span class="toggle-icon">+</span>
       </div>
       <div class="section-content">
-        <p>Trayectoria académica, exposiciones y reconocimientos profesionales.</p>
-        <p><strong>2024 —</strong> Exposición individual en Galería Central.</p>
-        <p><strong>2022 —</strong> Residencia artística internacional.</p>
-        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Currículum exposición" class="expanded-img-large">
+        <p>Explora los apartados de forma independiente haciendo clic en cada bloque horizontal:</p>
+        
+        <!-- Contenedor Horizontal -->
+        <div class="horizontal-sections-container">
+          
+          <!-- Tarjeta 1: Currículum -->
+          <div class="sub-section-card" onclick="toggleSubCard(this)">
+            <h3>Currículum</h3>
+            <p style="font-size: 0.9rem; opacity: 0.7; margin: 0;">Exposiciones, estudios y premios.</p>
+            <div class="sub-content-detail">
+              <p><strong>2024 —</strong> Exposición individual en Galería Central.</p>
+              <p><strong>2022 —</strong> Residencia artística internacional.</p>
+              <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1200&q=80" alt="Currículum" style="width:100%; height:250px; object-fit:cover; margin-top:1rem; filter:grayscale(100%);">
+            </div>
+          </div>
+
+          <!-- Tarjeta 2: Mi trabajo -->
+          <div class="sub-section-card" onclick="toggleSubCard(this)">
+            <h3>Mi trabajo</h3>
+            <p style="font-size: 0.9rem; opacity: 0.7; margin: 0;">Proyectos realizados y piezas clave.</p>
+            <div class="sub-content-detail">
+              <p>Una exploración constante sobre la monocromía y la tensión visual en la materia.</p>
+              <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1200&q=80" alt="Mi trabajo" style="width:100%; height:250px; object-fit:cover; margin-top:1rem; filter:grayscale(100%);">
+            </div>
+          </div>
+
+          <!-- Tarjeta 3: Futuros proyectos -->
+          <div class="sub-section-card" onclick="toggleSubCard(this)">
+            <h3>Futuros proyectos</h3>
+            <p style="font-size: 0.9rem; opacity: 0.7; margin: 0;">Próximas muestras y desarrollo.</p>
+            <div class="sub-content-detail">
+              <p>Próximas muestras, obra en desarrollo y nuevas líneas de investigación artística previstas para el próximo año.</p>
+              <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1200&q=80" alt="Futuros proyectos" style="width:100%; height:250px; object-fit:cover; margin-top:1rem; filter:grayscale(100%);">
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 
-    <!-- Sección 3: Mi trabajo -->
-    <div class="section-stack" id="seccion-trabajo">
-      <div class="section-header" onclick="toggleSection('seccion-trabajo')">
-        <h2>Mi trabajo</h2>
-        <span class="toggle-icon">+</span>
-      </div>
-      <div class="section-content">
-        <p>Proyectos realizados, series pictóricas e instalaciones clave.</p>
-        <p>Una exploración constante sobre la monocromía y la tensión visual.</p>
-        <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1600&q=80" alt="Mi trabajo" class="expanded-img-large">
-      </div>
-    </div>
-
-    <!-- Sección 4: Futuros proyectos -->
-    <div class="section-stack" id="seccion-futuros">
-      <div class="section-header" onclick="toggleSection('seccion-futuros')">
-        <h2>Futuros proyectos</h2>
-        <span class="toggle-icon">+</span>
-      </div>
-      <div class="section-content">
-        <p>Próximas muestras, obra en desarrollo y nuevas líneas de investigación artística.</p>
-        <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1600&q=80" alt="Futuros proyectos" class="expanded-img-large">
-      </div>
-    </div>
-
-    <!-- Sección 5: Contacto -->
+    <!-- Sección 3: Contacto -->
     <div class="section-stack" id="seccion-contacto">
       <div class="section-header" onclick="toggleSection('seccion-contacto')">
         <h2>Contacto</h2>
@@ -259,27 +315,25 @@
   </div>
 
   <script>
-    // Script automatizado para el intercambio lento y fluido de colores (Blanco <-> Negro)
-    let isWhite = false;
+    // Sistema de intercambio lento y fluido de colores (Inversión total del bloque y fondo general)
+    let inverted = false;
     function cycleColors() {
-      isWhite = !isWhite;
-      document.documentElement.style.setProperty('--bg', isWhite ? '#ffffff' : '#000000');
-      document.documentElement.style.setProperty('--fg', isWhite ? '#000000' : '#ffffff');
+      inverted = !inverted;
+      // Intercambia los valores de las variables globales de color
+      document.documentElement.style.setProperty('--color-a', inverted ? '#ffffff' : '#000000');
+      document.documentElement.style.setProperty('--color-b', inverted ? '#000000' : '#ffffff');
     }
-    // Cambia de color cada 12 segundos con total suavidad
-    setInterval(cycleColors, 12000);
+    // Cambia de color cada 15 segundos con total suavidad
+    setInterval(cycleColors, 15000);
 
-    // Sistema de acordeón estricto: Solo una sección abierta a la vez y control de márgenes
+    // Sistema de acordeón estricto para secciones principales (solo una abierta a la vez)
     function toggleSection(sectionId) {
       const targetSection = document.getElementById(sectionId);
       const allSections = document.querySelectorAll('.section-stack');
-
       const wasActive = targetSection.classList.contains('active');
 
-      // Cierra todas las secciones primero
       allSections.forEach(sec => sec.classList.remove('active'));
 
-      // Si no estaba activa, la abrimos
       if (!wasActive) {
         targetSection.classList.add('active');
       }
@@ -295,7 +349,7 @@
       updateWrapperMode();
     }
 
-    // Gestiona si el contenedor tiene márgenes o se pone a pantalla completa (0 márgenes)
+    // Gestiona si el contenedor interior tiene márgenes o se expande al 100%
     function updateWrapperMode() {
       const allSections = document.querySelectorAll('.section-stack');
       const wrapper = document.getElementById('mainWrapper');
@@ -312,6 +366,11 @@
       } else {
         wrapper.classList.remove('fullscreen-mode');
       }
+    }
+
+    // Apertura independiente de las tarjetas horizontales interiores
+    function toggleSubCard(cardElement) {
+      cardElement.classList.toggle('open');
     }
   </script>
 </body>
