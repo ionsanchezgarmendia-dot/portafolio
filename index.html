@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portafolio Minimalista</title>
+  <title>Ion Sánchez — Portafolio</title>
   <style>
     :root {
       --bg: #000000;
       --fg: #ffffff;
-      --transition-speed: 0.6s;
     }
 
     * {
@@ -23,30 +22,25 @@
       background-color: var(--bg);
       color: var(--fg);
       overflow-x: hidden;
-      animation: invertBackground 16s infinite alternate linear;
+      /* Transición extremadamente suave y lenta entre blanco y negro */
+      transition: background-color 4s ease, color 4s ease;
     }
 
-    /* Animación de intercambio lento de colores de fondo y texto */
-    @keyframes invertBackground {
-      0%, 20% { --bg: #000000; --fg: #ffffff; }
-      40%, 60% { --bg: #ffffff; --fg: #000000; }
-      80%, 100% { --bg: #000000; --fg: #ffffff; }
-    }
-
-    /* Contenedor con márgenes laterales grandes por defecto */
+    /* Contenedor con márgenes laterales (amplio por defecto) */
     .wrapper {
-      max-width: 600px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 0 2rem;
-      transition: max-width var(--transition-speed) ease;
+      padding: 0 4rem;
+      transition: max-width 0.6s ease, padding 0.6s ease;
     }
 
-    /* Cuando una sección está expandida, ensanchamos el contenedor */
-    .wrapper.expanded {
-      max-width: 1000px;
+    /* Cuando CUALQUIER sección está abierta, la web ocupa el 100% sin márgenes */
+    .wrapper.fullscreen-mode {
+      max-width: 100%;
+      padding: 0 6rem;
     }
 
-    /* 1. Banner de Bienvenida inicial (ocupa toda la altura de la pantalla) */
+    /* 1. Banner de Bienvenida inicial */
     .hero-banner {
       height: 100vh;
       display: flex;
@@ -56,14 +50,14 @@
     }
 
     .hero-title {
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: 300;
       letter-spacing: -1px;
       margin-bottom: 1rem;
     }
 
     .hero-subtitle {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       opacity: 0.7;
       margin-bottom: 2rem;
     }
@@ -72,11 +66,11 @@
       background: none;
       border: 1px solid var(--fg);
       color: var(--fg);
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 1.8rem;
       font-size: 0.9rem;
       cursor: pointer;
       text-decoration: none;
-      transition: background 0.3s, color 0.3s;
+      transition: background 0.4s, color 0.4s;
     }
 
     .btn-next:hover {
@@ -84,7 +78,7 @@
       color: var(--bg);
     }
 
-    /* 2. Secciones apiladas */
+    /* Secciones apiladas */
     .section-stack {
       padding: 4rem 0;
       border-top: 1px solid rgba(128, 128, 128, 0.3);
@@ -99,16 +93,32 @@
       user-select: none;
     }
 
+    /* Estilo especial para la cabecera de Ion Sánchez con foto circular */
+    .ion-header-content {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .mini-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      filter: grayscale(100%);
+      border: 1px solid rgba(128, 128, 128, 0.4);
+    }
+
     .section-header h2 {
-      font-size: 1.5rem;
+      font-size: 2rem;
       font-weight: 400;
       letter-spacing: -0.5px;
     }
 
     .toggle-icon {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       font-weight: 300;
-      transition: transform 0.3s ease;
+      transition: transform 0.4s ease;
     }
 
     /* Contenido expandible */
@@ -116,79 +126,50 @@
       max-height: 0;
       overflow: hidden;
       opacity: 0;
-      transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.4s ease;
+      transition: max-height 0.6s ease, opacity 0.5s ease, padding 0.5s ease;
     }
 
     .section-stack.active .section-content {
-      max-height: 1500px; /* Suficiente para albergar el contenido */
+      max-height: 2500px;
       opacity: 1;
-      padding: 2rem 0 1rem 0;
+      padding: 3rem 0 2rem 0;
     }
 
     .section-stack.active .toggle-icon {
-      transform: rotate(45deg); /* Gira el "+" convirtiéndolo en "x" o aspa */
+      transform: rotate(45deg);
     }
 
-    /* Estilos internos de las expansiones */
     p {
-      line-height: 1.6;
-      margin-bottom: 1rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
       opacity: 0.85;
+      font-size: 1.1rem;
     }
 
-    .expanded-img {
+    /* Imágenes expandidas grandes */
+    .expanded-img-large {
       width: 100%;
-      height: 350px;
+      height: 500px;
       object-fit: cover;
-      margin-top: 1.5rem;
+      margin-top: 2rem;
       filter: grayscale(100%);
       border: 1px solid rgba(128, 128, 128, 0.3);
     }
 
-    /* Subventanas para la sección intermedia */
-    .sub-windows-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-
-    .sub-window {
-      border: 1px solid rgba(128, 128, 128, 0.4);
-      padding: 1.5rem;
-      cursor: pointer;
-      transition: border-color 0.3s, background 0.3s;
-    }
-
-    .sub-window:hover {
-      border-color: var(--fg);
-      background: rgba(128, 128, 128, 0.05);
-    }
-
-    .sub-window h3 {
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-    }
-
-    /* Detalle oculto de las subventanas */
-    .sub-content-detail {
-      display: none;
-      margin-top: 1rem;
-      font-size: 0.95rem;
-      border-top: 1px dashed rgba(128, 128, 128, 0.3);
-      padding-top: 1rem;
-    }
-
-    .sub-window.open .sub-content-detail {
-      display: block;
-    }
-
     footer {
-      padding: 4rem 0;
-      font-size: 0.85rem;
+      padding: 5rem 0;
+      font-size: 0.9rem;
       opacity: 0.5;
-      text-align: center;
+      border-top: 1px solid rgba(128, 128, 128, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .wrapper, .wrapper.fullscreen-mode {
+        padding: 0 1.5rem;
+      }
+      .hero-title {
+        font-size: 2.2rem;
+      }
     }
   </style>
 </head>
@@ -198,123 +179,138 @@
 
     <!-- Banner de bienvenida -->
     <header class="hero-banner" id="bienvenida">
-      <h1 class="hero-title">Nombre Artístico</h1>
+      <h1 class="hero-title">Ion Sánchez</h1>
       <p class="hero-subtitle">Ficha artística / Portafolio contemporáneo.</p>
-      <a href="#seccion-sobre-mi" class="btn-next" onclick="expandSection('seccion-sobre-mi')">Siguiente ↓</a>
+      <a href="#seccion-ion" class="btn-next" onclick="openSectionOnly('seccion-ion')">Siguiente ↓</a>
     </header>
 
-    <!-- Sección 1: Sobre mí -->
-    <div class="section-stack" id="seccion-sobre-mi">
-      <div class="section-header" onclick="toggleSection('seccion-sobre-mi')">
-        <h2>Sobre mí</h2>
-        <span class="toggle-icon">+</span>
-      </div>
-      <div class="section-content">
-        <p>Aquí irá la descripción detallada de tu perfil artístico. Al abrir esta sección, los márgenes laterales se ensanchan automáticamente para ofrecer una lectura más amplia y envolvente.</p>
-        <p>Explora tu trayectoria, visión creativa y conceptos principales de tu obra.</p>
-        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80" alt="Imagen ampliada Sobre Mí" class="expanded-img">
-      </div>
-    </div>
-
-    <!-- Sección 2: Currículum / Mi trabajo / Futuros proyectos -->
-    <div class="section-stack" id="seccion-trabajos">
-      <div class="section-header" onclick="toggleSection('seccion-trabajos')">
-        <h2>Trayectoria & Obra</h2>
-        <span class="toggle-icon">+</span>
-      </div>
-      <div class="section-content">
-        <p>Selecciona una ventana para desplegar su contenido específico:</p>
-        
-        <div class="sub-windows-grid">
-          <!-- Ventana 1 -->
-          <div class="sub-window" onclick="toggleSubWindow(this)">
-            <h3>Currículum</h3>
-            <p style="font-size: 0.85rem; margin: 0;">Exposiciones, estudios y premios.</p>
-            <div class="sub-content-detail">
-              <p><strong>2024 -</strong> Exposición individual en Galería Central.</p>
-              <p><strong>2022 -</strong> Residencia artística internacional.</p>
-            </div>
-          </div>
-
-          <!-- Ventana 2 -->
-          <div class="sub-window" onclick="toggleSubWindow(this)">
-            <h3>Mi trabajo</h3>
-            <p style="font-size: 0.85rem; margin: 0;">Proyectos realizados y piezas clave.</p>
-            <div class="sub-content-detail">
-              <p>Serie fotográfica y pictórica enfocada en la dualidad del espacio y la materia.</p>
-            </div>
-          </div>
-
-          <!-- Ventana 3 -->
-          <div class="sub-window" onclick="toggleSubWindow(this)">
-            <h3>Futuros proyectos</h3>
-            <p style="font-size: 0.85rem; margin: 0;">Próximas obras y muestras.</p>
-            <div class="sub-content-detail">
-              <p>En desarrollo: Instalación interactiva prevista para finales de año.</p>
-            </div>
-          </div>
+    <!-- Sección 1: Ion Sánchez (Sobre mí) -->
+    <div class="section-stack" id="seccion-ion">
+      <div class="section-header" onclick="toggleSection('seccion-ion')">
+        <div class="ion-header-content">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" alt="Ion Sánchez" class="mini-avatar">
+          <h2>Ion Sánchez</h2>
         </div>
-
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="section-content">
+        <p>Aquí se despliega la visión artística y biográfica completa. Al abrir esta sección, los márgenes desaparecen por completo, expandiendo el contenido a lo ancho de la pantalla para una experiencia inmersiva.</p>
+        <p>Investigo los límites de la materia, la forma y el espacio a través de proyectos multidisciplinares y visuales.</p>
+        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1600&q=80" alt="Obra de Ion Sánchez" class="expanded-img-large">
       </div>
     </div>
 
-    <!-- Sección 3: Contacto -->
+    <!-- Sección 2: Currículum -->
+    <div class="section-stack" id="seccion-curriculum">
+      <div class="section-header" onclick="toggleSection('seccion-curriculum')">
+        <h2>Currículum</h2>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="section-content">
+        <p>Trayectoria académica, exposiciones y reconocimientos profesionales.</p>
+        <p><strong>2024 —</strong> Exposición individual en Galería Central.</p>
+        <p><strong>2022 —</strong> Residencia artística internacional.</p>
+        <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Currículum exposición" class="expanded-img-large">
+      </div>
+    </div>
+
+    <!-- Sección 3: Mi trabajo -->
+    <div class="section-stack" id="seccion-trabajo">
+      <div class="section-header" onclick="toggleSection('seccion-trabajo')">
+        <h2>Mi trabajo</h2>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="section-content">
+        <p>Proyectos realizados, series pictóricas e instalaciones clave.</p>
+        <p>Una exploración constante sobre la monocromía y la tensión visual.</p>
+        <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1600&q=80" alt="Mi trabajo" class="expanded-img-large">
+      </div>
+    </div>
+
+    <!-- Sección 4: Futuros proyectos -->
+    <div class="section-stack" id="seccion-futuros">
+      <div class="section-header" onclick="toggleSection('seccion-futuros')">
+        <h2>Futuros proyectos</h2>
+        <span class="toggle-icon">+</span>
+      </div>
+      <div class="section-content">
+        <p>Próximas muestras, obra en desarrollo y nuevas líneas de investigación artística.</p>
+        <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1600&q=80" alt="Futuros proyectos" class="expanded-img-large">
+      </div>
+    </div>
+
+    <!-- Sección 5: Contacto -->
     <div class="section-stack" id="seccion-contacto">
       <div class="section-header" onclick="toggleSection('seccion-contacto')">
         <h2>Contacto</h2>
         <span class="toggle-icon">+</span>
       </div>
       <div class="section-content">
-        <p>Para colaboraciones, adquisiciones o consultas generales:</p>
-        <p><strong>Correo:</strong> tuemail@ejemplo.com</p>
-        <p><strong>Instagram:</strong> @tuusuario</p>
+        <p>Para colaboraciones, adquisiciones o consultas profesionales:</p>
+        <p><strong>Correo:</strong> ion@ejemplo.com</p>
+        <p><strong>Instagram:</strong> @ionsanchez</p>
       </div>
     </div>
 
     <footer>
-      <p>© 2026. Todos los derechos reservados.</p>
+      <p>© 2026 Ion Sánchez. Todos los derechos reservados.</p>
     </footer>
 
   </div>
 
   <script>
-    // Función para abrir/cerrar secciones apiladas principales
+    // Script automatizado para el intercambio lento y fluido de colores (Blanco <-> Negro)
+    let isWhite = false;
+    function cycleColors() {
+      isWhite = !isWhite;
+      document.documentElement.style.setProperty('--bg', isWhite ? '#ffffff' : '#000000');
+      document.documentElement.style.setProperty('--fg', isWhite ? '#000000' : '#ffffff');
+    }
+    // Cambia de color cada 12 segundos con total suavidad
+    setInterval(cycleColors, 12000);
+
+    // Sistema de acordeón estricto: Solo una sección abierta a la vez y control de márgenes
     function toggleSection(sectionId) {
-      const section = document.getElementById(sectionId);
-      section.classList.toggle('active');
-      checkWrapperWidth();
-    }
+      const targetSection = document.getElementById(sectionId);
+      const allSections = document.querySelectorAll('.section-stack');
 
-    // Función directa desde el botón "Siguiente"
-    function expandSection(sectionId) {
-      const section = document.getElementById(sectionId);
-      if (!section.classList.contains('active')) {
-        section.classList.add('active');
+      const wasActive = targetSection.classList.contains('active');
+
+      // Cierra todas las secciones primero
+      allSections.forEach(sec => sec.classList.remove('active'));
+
+      // Si no estaba activa, la abrimos
+      if (!wasActive) {
+        targetSection.classList.add('active');
       }
-      checkWrapperWidth();
+
+      updateWrapperMode();
     }
 
-    // Función para abrir subventanas dentro de la sección intermedia
-    function toggleSubWindow(element) {
-      element.classList.toggle('open');
+    // Abrir una específica desde el botón Siguiente
+    function openSectionOnly(sectionId) {
+      const allSections = document.querySelectorAll('.section-stack');
+      allSections.forEach(sec => sec.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+      updateWrapperMode();
     }
 
-    // Revisa si alguna sección principal está abierta para ensanchar el contenedor de márgenes
-    function checkWrapperWidth() {
-      const sections = document.querySelectorAll('.section-stack');
+    // Gestiona si el contenedor tiene márgenes o se pone a pantalla completa (0 márgenes)
+    function updateWrapperMode() {
+      const allSections = document.querySelectorAll('.section-stack');
       const wrapper = document.getElementById('mainWrapper');
       let anyOpen = false;
 
-      sections.forEach(sec => {
+      allSections.forEach(sec => {
         if (sec.classList.contains('active')) {
           anyOpen = true;
         }
       });
 
       if (anyOpen) {
-        wrapper.classList.add('expanded');
+        wrapper.classList.add('fullscreen-mode');
       } else {
-        wrapper.classList.remove('expanded');
+        wrapper.classList.remove('fullscreen-mode');
       }
     }
   </script>
