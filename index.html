@@ -19,7 +19,6 @@
       scroll-behavior: smooth;
     }
 
-    /* Fondo general (Exterior) */
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--color-outer-bg);
@@ -28,7 +27,7 @@
       transition: background-color 5s ease, color 5s ease;
     }
 
-    /* 1. HERO / BANNER DE BIENVENIDA (FUERA DE LA CAJA INTIERIOR) */
+    /* BANNER DE BIENVENIDA (EXTERIOR) */
     .hero-banner {
       min-height: 90vh;
       display: flex;
@@ -69,7 +68,7 @@
       color: var(--color-outer-bg);
     }
 
-    /* 2. CAJA INTERIOR DELIMITADA CON COLOR DE FONDO INDEPENDIENTE */
+    /* CAJA INTERIOR CON COLOR INDEPENDIENTE */
     .inner-box {
       max-width: 1000px;
       margin: 0 auto 4rem auto;
@@ -80,7 +79,7 @@
       transition: max-width 0.6s ease, padding 0.6s ease, background-color 5s ease, color 5s ease;
     }
 
-    /* Cuando CUALQUIER sección está abierta, la caja interior se ensancha al 100% sin márgenes laterales */
+    /* Se expande al 100% de la pantalla sin márgenes cuando hay algo abierto */
     .inner-box.fullscreen-mode {
       max-width: 100%;
       padding: 2rem 6rem;
@@ -88,7 +87,7 @@
       border-right: none;
     }
 
-    /* Estructura de Secciones Apiladas */
+    /* Estructura de Secciones */
     .section-stack {
       border-bottom: 1px solid rgba(128, 128, 128, 0.4);
     }
@@ -133,30 +132,65 @@
       transition: transform 0.4s ease;
     }
 
-    /* FILA DE 3 SECCIONES HORIZONTALES (Currículum | Mi Trabajo | Futuros Proyectos) */
-    .horizontal-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+    /* PESTAÑAS HORIZONTALES (FILA SUPERIOR + CONTENIDO COMPLETO DEBAJO) */
+    .tabs-wrapper {
       border-bottom: 1px solid rgba(128, 128, 128, 0.4);
     }
 
-    .horizontal-col {
-      border-right: 1px solid rgba(128, 128, 128, 0.4);
+    .tabs-header-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
     }
 
-    .horizontal-col:last-child {
+    .tab-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 1.5rem;
+      cursor: pointer;
+      border-right: 1px solid rgba(128, 128, 128, 0.4);
+      user-select: none;
+    }
+
+    .tab-item:last-child {
       border-right: none;
     }
 
-    .horizontal-col .section-header {
-      padding: 2rem 1.5rem;
-    }
-
-    .horizontal-col .section-header h2 {
+    .tab-item h2 {
       font-size: 1.4rem;
+      font-weight: 400;
     }
 
-    /* Contenidos expandibles */
+    /* Transición del signo "+" a "x" al activar una pestaña */
+    .tab-item.active .toggle-icon {
+      transform: rotate(45deg);
+    }
+
+    /* Contenedor desplegable que abarca todo el ancho inferior */
+    .tabs-content-display {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.6s ease, opacity 0.5s ease, padding 0.5s ease;
+    }
+
+    .tabs-content-display.active {
+      max-height: 3000px;
+      opacity: 1;
+      padding: 2rem 1.5rem 3rem 1.5rem;
+      border-top: 1px solid rgba(128, 128, 128, 0.4);
+    }
+
+    /* Ocultar/Mostrar paneles individuales dentro del área desplegada */
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Contenidos expandibles normales (Ion Sánchez y Contacto) */
     .section-content {
       max-height: 0;
       overflow: hidden;
@@ -164,19 +198,13 @@
       transition: max-height 0.6s ease, opacity 0.5s ease, padding 0.5s ease;
     }
 
-    /* Expansión activa */
-    .active .section-content {
+    .section-stack.active .section-content {
       max-height: 3000px;
       opacity: 1;
       padding: 1rem 0 3rem 0;
     }
 
-    /* Si es dentro de una columna horizontal, ajustamos el padding */
-    .horizontal-col.active .section-content {
-      padding: 1rem 1.5rem 3rem 1.5rem;
-    }
-
-    .active .toggle-icon {
+    .section-stack.active .toggle-icon {
       transform: rotate(45deg);
     }
 
@@ -189,7 +217,7 @@
 
     .expanded-img-large {
       width: 100%;
-      height: 480px;
+      height: 500px;
       object-fit: cover;
       margin-top: 1.5rem;
       filter: grayscale(100%);
@@ -203,10 +231,10 @@
     }
 
     @media (max-width: 850px) {
-      .horizontal-row {
+      .tabs-header-row {
         grid-template-columns: 1fr;
       }
-      .horizontal-col {
+      .tab-item {
         border-right: none;
         border-bottom: 1px solid rgba(128, 128, 128, 0.4);
       }
@@ -228,7 +256,7 @@
     <a href="#seccion-ion" class="btn-next" onclick="openSectionOnly('seccion-ion')">Siguiente ↓</a>
   </header>
 
-  <!-- CAJA INTERIOR CON COLOR DE FONDO INDEPENDIENTE -->
+  <!-- CAJA INTERIOR CON COLOR INDEPENDIENTE -->
   <div class="inner-box" id="innerBox">
 
     <!-- Sección 1: Ion Sánchez -->
@@ -247,47 +275,54 @@
       </div>
     </div>
 
-    <!-- SECCIONES HORIZONTALES (3 columnas delimitadas por líneas verticales) -->
-    <div class="horizontal-row">
+    <!-- SECCIÓN DE PESTAÑAS HORIZONTALES (3 CABECERAS Y UN ÚNICO CONTENEDOR ANCHO ABAJO) -->
+    <div class="tabs-wrapper">
       
-      <!-- Columna 1: Currículum -->
-      <div class="horizontal-col" id="col-curriculum">
-        <div class="section-header" onclick="toggleSection('col-curriculum')">
+      <!-- Fila de cabeceras -->
+      <div class="tabs-header-row">
+        
+        <div class="tab-item" id="tab-curriculum" onclick="toggleTab('curriculum')">
           <h2>Currículum</h2>
           <span class="toggle-icon">+</span>
         </div>
-        <div class="section-content">
-          <p><strong>2024 —</strong> Exposición individual en Galería Central.</p>
-          <p><strong>2022 —</strong> Residencia artística internacional.</p>
-          <p><strong>2020 —</strong> Grado en Bellas Artes.</p>
-          <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80" alt="Currículum" class="expanded-img-large">
-        </div>
-      </div>
 
-      <!-- Columna 2: Mi Trabajo -->
-      <div class="horizontal-col" id="col-trabajo">
-        <div class="section-header" onclick="toggleSection('col-trabajo')">
+        <div class="tab-item" id="tab-trabajo" onclick="toggleTab('trabajo')">
           <h2>Mi Trabajo</h2>
           <span class="toggle-icon">+</span>
         </div>
-        <div class="section-content">
-          <p>Selección de obras pictóricas, escultóricas e instalaciones recientes.</p>
-          <p>Exploración visual en gran formato enfocada en la relación entre el vacío y la materia.</p>
-          <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80" alt="Mi Trabajo" class="expanded-img-large">
-        </div>
-      </div>
 
-      <!-- Columna 3: Futuros proyectos -->
-      <div class="horizontal-col" id="col-futuros">
-        <div class="section-header" onclick="toggleSection('col-futuros')">
+        <div class="tab-item" id="tab-futuros" onclick="toggleTab('futuros')">
           <h2>Futuros proyectos</h2>
           <span class="toggle-icon">+</span>
         </div>
-        <div class="section-content">
+
+      </div>
+
+      <!-- Área de contenido que se come todo el ancho inferior -->
+      <div class="tabs-content-display" id="tabsDisplay">
+        
+        <!-- Panel 1: Currículum -->
+        <div class="tab-panel" id="panel-curriculum">
+          <p><strong>2024 —</strong> Exposición individual en Galería Central.</p>
+          <p><strong>2022 —</strong> Residencia artística internacional.</p>
+          <p><strong>2020 —</strong> Grado en Bellas Artes.</p>
+          <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Currículum" class="expanded-img-large">
+        </div>
+
+        <!-- Panel 2: Mi Trabajo -->
+        <div class="tab-panel" id="panel-trabajo">
+          <p>Selección de obras pictóricas, escultóricas e instalaciones recientes.</p>
+          <p>Exploración visual en gran formato enfocada en la relación entre el vacío y la materia.</p>
+          <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1600&q=80" alt="Mi Trabajo" class="expanded-img-large">
+        </div>
+
+        <!-- Panel 3: Futuros proyectos -->
+        <div class="tab-panel" id="panel-futuros">
           <p>Próximas exposiciones, investigaciones en curso y colaboraciones programadas.</p>
           <p>Proyecto de instalación efímera en desarrollo.</p>
-          <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=80" alt="Futuros proyectos" class="expanded-img-large">
+          <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1600&q=80" alt="Futuros proyectos" class="expanded-img-large">
         </div>
+
       </div>
 
     </div>
@@ -312,7 +347,7 @@
   </div>
 
   <script>
-    // Intercambio pausado y lento de colores entre el Fondo Exterior y la Caja Interior
+    // Ciclo de intercambio de color (Fondo exterior e interior)
     let isSwapped = false;
     function cycleColors() {
       isSwapped = !isSwapped;
@@ -321,19 +356,43 @@
       document.documentElement.style.setProperty('--color-inner-bg', isSwapped ? '#000000' : '#ffffff');
       document.documentElement.style.setProperty('--color-inner-fg', isSwapped ? '#ffffff' : '#000000');
     }
-    // Ocurre cada 16 segundos
     setInterval(cycleColors, 16000);
 
-    // Sistema de acordeón global (Una sola sección abierta a la vez)
+    // Control de las 3 pestañas horizontales
+    function toggleTab(tabKey) {
+      const selectedTab = document.getElementById(`tab-${tabKey}`);
+      const selectedPanel = document.getElementById(`panel-${tabKey}`);
+      const tabsDisplay = document.getElementById('tabsDisplay');
+      
+      const isAlreadyActive = selectedTab.classList.contains('active');
+
+      // Cerrar primero cualquier otra sección abierta fuera de las pestañas
+      closeNormalSections();
+
+      // Desactivar todas las pestañas y sus paneles
+      document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+      if (!isAlreadyActive) {
+        selectedTab.classList.add('active');
+        selectedPanel.classList.add('active');
+        tabsDisplay.classList.add('active');
+      } else {
+        tabsDisplay.classList.remove('active');
+      }
+
+      updateBoxWidth();
+    }
+
+    // Control de secciones verticales normales (Ion Sánchez y Contacto)
     function toggleSection(sectionId) {
       const target = document.getElementById(sectionId);
-      const allInteractiveSections = document.querySelectorAll('.section-stack, .horizontal-col');
       const wasActive = target.classList.contains('active');
 
-      // Cerrar absolutamente todas
-      allInteractiveSections.forEach(sec => sec.classList.remove('active'));
+      // Cerrar pestañas horizontales y secciones normales
+      closeTabs();
+      closeNormalSections();
 
-      // Si no estaba activa, abrirla
       if (!wasActive) {
         target.classList.add('active');
       }
@@ -342,25 +401,29 @@
     }
 
     function openSectionOnly(sectionId) {
-      const allInteractiveSections = document.querySelectorAll('.section-stack, .horizontal-col');
-      allInteractiveSections.forEach(sec => sec.classList.remove('active'));
+      closeTabs();
+      closeNormalSections();
       document.getElementById(sectionId).classList.add('active');
       updateBoxWidth();
     }
 
-    // Gestiona si la caja interior se ensancha al 100% (0 márgenes)
+    function closeTabs() {
+      document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+      document.getElementById('tabsDisplay').classList.remove('active');
+    }
+
+    function closeNormalSections() {
+      document.querySelectorAll('.section-stack').forEach(sec => sec.classList.remove('active'));
+    }
+
+    // Ensancha la caja al 100% si hay CUALQUIER elemento desplegado
     function updateBoxWidth() {
-      const allInteractiveSections = document.querySelectorAll('.section-stack, .horizontal-col');
       const box = document.getElementById('innerBox');
-      let anyOpen = false;
+      const anySectionActive = document.querySelectorAll('.section-stack.active').length > 0;
+      const anyTabActive = document.querySelectorAll('.tab-item.active').length > 0;
 
-      allInteractiveSections.forEach(sec => {
-        if (sec.classList.contains('active')) {
-          anyOpen = true;
-        }
-      });
-
-      if (anyOpen) {
+      if (anySectionActive || anyTabActive) {
         box.classList.add('fullscreen-mode');
       } else {
         box.classList.remove('fullscreen-mode');
