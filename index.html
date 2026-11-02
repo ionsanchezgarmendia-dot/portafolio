@@ -27,9 +27,11 @@
       transition: background-color 5s ease, color 5s ease;
     }
 
-    /* BANNER DE BIENVENIDA (EXTERIOR) */
+    /* 1. HERO EN PANTALLA COMPLETA E INDEPENDIENTE */
     .hero-banner {
-      min-height: 90vh;
+      position: relative;
+      height: 100vh; /* Ocupa el 100% exacto de la pantalla visual */
+      width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -37,6 +39,25 @@
       max-width: 1000px;
       margin: 0 auto;
       padding: 0 4rem;
+      overflow: hidden;
+    }
+
+    /* Lienzo interactivo para las burbujas animadas detrás del texto */
+    #heroCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: auto; /* Permite detectar el ratón */
+    }
+
+    /* Contenido del Hero sobre el lienzo */
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      pointer-events: none; /* Deja pasar la interacción del ratón hacia el canvas */
     }
 
     .hero-title {
@@ -53,6 +74,8 @@
     }
 
     .btn-next {
+      pointer-events: auto; /* Reactiva clics en el botón */
+      display: inline-block;
       background: none;
       border: 1px solid var(--color-outer-fg);
       color: var(--color-outer-fg);
@@ -68,10 +91,10 @@
       color: var(--color-outer-bg);
     }
 
-    /* CAJA INTERIOR CON COLOR INDEPENDIENTE */
+    /* 2. CAJA INTERIOR SEPARADA DEL HERO */
     .inner-box {
       max-width: 1000px;
-      margin: 0 auto 4rem auto;
+      margin: 15vh auto 6rem auto; /* Distancia amplia con respecto al Hero */
       padding: 2rem 4rem;
       background-color: var(--color-inner-bg);
       color: var(--color-inner-fg);
@@ -79,7 +102,6 @@
       transition: max-width 0.6s ease, padding 0.6s ease, background-color 5s ease, color 5s ease;
     }
 
-    /* Se expande al 100% de la pantalla sin márgenes cuando hay algo abierto */
     .inner-box.fullscreen-mode {
       max-width: 100%;
       padding: 2rem 6rem;
@@ -132,7 +154,7 @@
       transition: transform 0.4s ease;
     }
 
-    /* PESTAÑAS HORIZONTALES (FILA SUPERIOR + CONTENIDO COMPLETO DEBAJO) */
+    /* PESTAÑAS HORIZONTALES */
     .tabs-wrapper {
       border-bottom: 1px solid rgba(128, 128, 128, 0.4);
     }
@@ -161,12 +183,10 @@
       font-weight: 400;
     }
 
-    /* Transición del signo "+" a "x" al activar una pestaña */
     .tab-item.active .toggle-icon {
       transform: rotate(45deg);
     }
 
-    /* Contenedor desplegable que abarca todo el ancho inferior */
     .tabs-content-display {
       max-height: 0;
       overflow: hidden;
@@ -181,7 +201,6 @@
       border-top: 1px solid rgba(128, 128, 128, 0.4);
     }
 
-    /* Ocultar/Mostrar paneles individuales dentro del área desplegada */
     .tab-panel {
       display: none;
     }
@@ -190,7 +209,6 @@
       display: block;
     }
 
-    /* Contenidos expandibles normales (Ion Sánchez y Contacto) */
     .section-content {
       max-height: 0;
       overflow: hidden;
@@ -240,6 +258,7 @@
       }
       .inner-box, .inner-box.fullscreen-mode {
         padding: 1.5rem;
+        margin-top: 10vh;
       }
       .hero-banner {
         padding: 0 1.5rem;
@@ -249,14 +268,17 @@
 </head>
 <body>
 
-  <!-- BANNER EXTERIOR -->
+  <!-- BANNER EXTERIOR PANTALLA COMPLETA -->
   <header class="hero-banner" id="bienvenida">
-    <h1 class="hero-title">Ion Sánchez</h1>
-    <p class="hero-subtitle">Ficha artística / Portafolio contemporáneo.</p>
-    <a href="#seccion-ion" class="btn-next" onclick="openSectionOnly('seccion-ion')">Siguiente ↓</a>
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-content">
+      <h1 class="hero-title">Ion Sánchez</h1>
+      <p class="hero-subtitle">Ficha artística / Portafolio contemporáneo.</p>
+      <a href="#innerBox" class="btn-next">Siguiente ↓</a>
+    </div>
   </header>
 
-  <!-- CAJA INTERIOR CON COLOR INDEPENDIENTE -->
+  <!-- CAJA INTERIOR CON ESPACIADO AISLADO -->
   <div class="inner-box" id="innerBox">
 
     <!-- Sección 1: Ion Sánchez -->
@@ -275,10 +297,9 @@
       </div>
     </div>
 
-    <!-- SECCIÓN DE PESTAÑAS HORIZONTALES (3 CABECERAS Y UN ÚNICO CONTENEDOR ANCHO ABAJO) -->
+    <!-- SECCIÓN DE PESTAÑAS HORIZONTALES -->
     <div class="tabs-wrapper">
       
-      <!-- Fila de cabeceras -->
       <div class="tabs-header-row">
         
         <div class="tab-item" id="tab-curriculum" onclick="toggleTab('curriculum')">
@@ -298,10 +319,8 @@
 
       </div>
 
-      <!-- Área de contenido que se come todo el ancho inferior -->
       <div class="tabs-content-display" id="tabsDisplay">
         
-        <!-- Panel 1: Currículum -->
         <div class="tab-panel" id="panel-curriculum">
           <p><strong>2024 —</strong> Exposición individual en Galería Central.</p>
           <p><strong>2022 —</strong> Residencia artística internacional.</p>
@@ -309,14 +328,12 @@
           <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Currículum" class="expanded-img-large">
         </div>
 
-        <!-- Panel 2: Mi Trabajo -->
         <div class="tab-panel" id="panel-trabajo">
           <p>Selección de obras pictóricas, escultóricas e instalaciones recientes.</p>
           <p>Exploración visual en gran formato enfocada en la relación entre el vacío y la materia.</p>
           <img src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=1600&q=80" alt="Mi Trabajo" class="expanded-img-large">
         </div>
 
-        <!-- Panel 3: Futuros proyectos -->
         <div class="tab-panel" id="panel-futuros">
           <p>Próximas exposiciones, investigaciones en curso y colaboraciones programadas.</p>
           <p>Proyecto de instalación efímera en desarrollo.</p>
@@ -347,7 +364,118 @@
   </div>
 
   <script>
-    // Ciclo de intercambio de color (Fondo exterior e interior)
+    // -------------------------------------------------------------
+    // 1. SISTEMA FÍSICO DE BURBUJAS EN CANVAS (HERO)
+    // -------------------------------------------------------------
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let mouse = { x: -1000, y: -1000 };
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    window.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+
+    // Definición de las 3 burbujas orgánicas
+    class Bubble {
+      constructor(x, y, radius, vx, vy) {
+        this.baseX = x;
+        this.baseY = y;
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.vx = vx;
+        this.vy = vy;
+        this.angle = Math.random() * Math.PI * 2;
+      }
+
+      update() {
+        // Movimiento flotante
+        this.angle += 0.015;
+        this.x += this.vx + Math.cos(this.angle) * 0.8;
+        this.y += this.vy + Math.sin(this.angle) * 0.8;
+
+        // Rebote suave en bordes
+        if (this.x - this.radius < 0 || this.x + this.radius > canvas.width) this.vx *= -1;
+        if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) this.vy *= -1;
+
+        // Deformación / Repulsión con el ratón
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < this.radius + 80) {
+          const angleMouse = Math.atan2(dy, dx);
+          const force = (this.radius + 80 - dist) * 0.15;
+          this.x -= Math.cos(angleMouse) * force;
+          this.y -= Math.sin(angleMouse) * force;
+        }
+      }
+
+      draw(color) {
+        ctx.beginPath();
+        
+        // Deformación fluida del perímetro
+        const points = 8;
+        for (let i = 0; i < points; i++) {
+          const a = (i / points) * Math.PI * 2;
+          const dx = mouse.x - (this.x + Math.cos(a) * this.radius);
+          const dy = mouse.y - (this.y + Math.sin(a) * this.radius);
+          const dist = Math.hypot(dx, dy);
+          
+          let deform = Math.sin(this.angle * 2 + i) * 6;
+          if (dist < 100) {
+            deform -= (100 - dist) * 0.25; // Se chafa o deforma al pasar el ratón
+          }
+
+          const r = this.radius + deform;
+          const px = this.x + Math.cos(a) * r;
+          const py = this.y + Math.sin(a) * r;
+
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.globalAlpha = 0.22; // Suave para no restar visibilidad al texto
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+      }
+    }
+
+    const bubbles = [
+      new Bubble(canvas.width * 0.3, canvas.height * 0.4, 140, 0.4, -0.3),
+      new Bubble(canvas.width * 0.7, canvas.height * 0.3, 180, -0.3, 0.4),
+      new Bubble(canvas.width * 0.5, canvas.height * 0.7, 120, 0.5, 0.2)
+    ];
+
+    function animateBubbles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const bubbleColor = getComputedStyle(document.documentElement).getPropertyValue('--color-outer-fg').trim();
+
+      bubbles.forEach(b => {
+        b.update();
+        b.draw(bubbleColor);
+      });
+
+      requestAnimationFrame(animateBubbles);
+    }
+    animateBubbles();
+
+
+    // -------------------------------------------------------------
+    // 2. CICLO LENTO DE INTERCAMBIO DE COLORES
+    // -------------------------------------------------------------
     let isSwapped = false;
     function cycleColors() {
       isSwapped = !isSwapped;
@@ -358,7 +486,10 @@
     }
     setInterval(cycleColors, 16000);
 
-    // Control de las 3 pestañas horizontales
+
+    // -------------------------------------------------------------
+    // 3. CONTROL DE PESTAÑAS HORIZONTALES Y SECCIONES
+    // -------------------------------------------------------------
     function toggleTab(tabKey) {
       const selectedTab = document.getElementById(`tab-${tabKey}`);
       const selectedPanel = document.getElementById(`panel-${tabKey}`);
@@ -366,10 +497,8 @@
       
       const isAlreadyActive = selectedTab.classList.contains('active');
 
-      // Cerrar primero cualquier otra sección abierta fuera de las pestañas
       closeNormalSections();
 
-      // Desactivar todas las pestañas y sus paneles
       document.querySelectorAll('.tab-item').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
 
@@ -384,12 +513,10 @@
       updateBoxWidth();
     }
 
-    // Control de secciones verticales normales (Ion Sánchez y Contacto)
     function toggleSection(sectionId) {
       const target = document.getElementById(sectionId);
       const wasActive = target.classList.contains('active');
 
-      // Cerrar pestañas horizontales y secciones normales
       closeTabs();
       closeNormalSections();
 
@@ -397,13 +524,6 @@
         target.classList.add('active');
       }
 
-      updateBoxWidth();
-    }
-
-    function openSectionOnly(sectionId) {
-      closeTabs();
-      closeNormalSections();
-      document.getElementById(sectionId).classList.add('active');
       updateBoxWidth();
     }
 
@@ -417,7 +537,6 @@
       document.querySelectorAll('.section-stack').forEach(sec => sec.classList.remove('active'));
     }
 
-    // Ensancha la caja al 100% si hay CUALQUIER elemento desplegado
     function updateBoxWidth() {
       const box = document.getElementById('innerBox');
       const anySectionActive = document.querySelectorAll('.section-stack.active').length > 0;
